@@ -1,10 +1,17 @@
 from pathlib import Path
+
 import os
+
 from functools import wraps
+
 import io
+
 import sqlite3
+
 import uuid
+
 from datetime import datetime, timedelta, timezone
+
 
 from flask import (
     Flask,
@@ -19,14 +26,18 @@ from flask import (
     abort
 )
 
+
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash
 )
 
+
 from werkzeug.exceptions import RequestEntityTooLarge
 
+
 from dotenv import dotenv_values
+
 
 from azure.storage.blob import (
     BlobServiceClient,
@@ -45,15 +56,23 @@ BASE_DIR = Path(__file__).resolve().parent
 
 ENV_FILE = BASE_DIR / ".env"
 
-DATABASE = BASE_DIR / "cloud_workspace.db"
+
+# Vercel serverless functions can only write to /tmp.
+# Local development keeps using cloud_workspace.db
+# inside the project folder.
+if os.environ.get("VERCEL"):
+    DATABASE = Path("/tmp/cloud_workspace.db")
+else:
+    DATABASE = BASE_DIR / "cloud_workspace.db"
 
 
 # =========================================================
 # ENVIRONMENT
 # =========================================================
 
-# Load local .env for development.
-# On Vercel, environment variables are supplied by Vercel.
+# Load .env locally.
+# On Vercel, environment variables supplied by Vercel
+# take priority over the local .env file.
 config = dotenv_values(ENV_FILE)
 
 AZURE_CONNECTION_STRING = (
@@ -94,9 +113,9 @@ app.secret_key = FLASK_SECRET_KEY
 MAX_FILE_SIZE_MB = 100
 
 MAX_FILE_SIZE = (
-    MAX_FILE_SIZE_MB
-    * 1024
-    * 1024
+    MAX_FILE_SIZE_MB *
+    1024 *
+    1024
 )
 
 
@@ -115,6 +134,7 @@ blob_service_client = BlobServiceClient.from_connection_string(
     AZURE_CONNECTION_STRING
 )
 
+
 container_client = (
     blob_service_client
     .get_container_client(AZURE_CONTAINER_NAME)
@@ -126,6 +146,7 @@ container_client = (
 # =========================================================
 
 def get_db():
+
     db = sqlite3.connect(
         DATABASE
     )
@@ -161,6 +182,7 @@ def init_db():
         )
     """)
 
+
     # -----------------------------------------------------
     # FILES TABLE
     # -----------------------------------------------------
@@ -188,6 +210,7 @@ def init_db():
         )
     """)
 
+
     # -----------------------------------------------------
     # ADD ACCESS TIER TO OLD DATABASES
     # -----------------------------------------------------
@@ -199,6 +222,7 @@ def init_db():
         ).fetchall()
     ]
 
+
     if "access_tier" not in columns:
 
         db.execute("""
@@ -206,6 +230,7 @@ def init_db():
             ADD COLUMN access_tier TEXT
             NOT NULL DEFAULT 'Hot'
         """)
+
 
     db.commit()
 
@@ -223,7 +248,9 @@ def get_current_user():
     if not user_id:
         return None
 
+
     db = get_db()
+
 
     user = db.execute(
         """
@@ -234,7 +261,9 @@ def get_current_user():
         (user_id,)
     ).fetchone()
 
+
     db.close()
+
 
     return user
 
@@ -246,6 +275,7 @@ def get_current_user():
 def login_required(function):
 
     @wraps(function)
+
     def decorated(*args, **kwargs):
 
         if not session.get("user_id"):
@@ -259,11 +289,14 @@ def login_required(function):
                     "message": "Please login first."
                 }), 401
 
+
             return redirect(
                 url_for("login")
             )
 
+
         return function(*args, **kwargs)
+
 
     return decorated
 
@@ -271,9 +304,11 @@ def login_required(function):
 def admin_required(function):
 
     @wraps(function)
+
     def decorated(*args, **kwargs):
 
         user = get_current_user()
+
 
         if not user:
 
@@ -281,11 +316,14 @@ def admin_required(function):
                 url_for("login")
             )
 
+
         if not user["is_admin"]:
 
             abort(403)
 
+
         return function(*args, **kwargs)
+
 
     return decorated
 
@@ -301,6 +339,7 @@ VALID_TIERS = {
     "Archive"
 }
 
+
 VALID_VISIBILITY = {
     "private",
     "public"
@@ -310,6 +349,7 @@ VALID_VISIBILITY = {
 def get_file_record(file_id):
 
     db = get_db()
+
 
     file = db.execute(
         """
@@ -324,7 +364,9 @@ def get_file_record(file_id):
         (file_id,)
     ).fetchone()
 
+
     db.close()
+
 
     return file
 
@@ -334,8 +376,10 @@ def can_manage_file(file, user):
     if not user:
         return False
 
+
     if user["is_admin"]:
         return True
+
 
     return file["owner_id"] == user["id"]
 
@@ -345,11 +389,14 @@ def can_view_file(file, user):
     if not user:
         return False
 
+
     if user["is_admin"]:
         return True
 
+
     if file["owner_id"] == user["id"]:
         return True
+
 
     return file["visibility"] == "public"
 
@@ -359,11 +406,14 @@ def format_size(size):
     if size < 1024:
         return f"{size} B"
 
+
     if size < 1024 * 1024:
         return f"{size / 1024:.1f} KB"
 
+
     if size < 1024 * 1024 * 1024:
         return f"{size / 1024 / 1024:.1f} MB"
+
 
     return f"{size / 1024 / 1024 / 1024:.1f} GB"
 
@@ -376,6 +426,7 @@ def sync_existing_blobs():
 
     user_db = get_db()
 
+
     admin = user_db.execute(
         """
         SELECT *
@@ -386,13 +437,16 @@ def sync_existing_blobs():
         """
     ).fetchone()
 
+
     if not admin:
 
         user_db.close()
 
         return
 
+
     blobs = container_client.list_blobs()
+
 
     for blob in blobs:
 
@@ -405,8 +459,10 @@ def sync_existing_blobs():
             (blob.name,)
         ).fetchone()
 
+
         if exists:
             continue
+
 
         user_db.execute(
             """
@@ -439,6 +495,7 @@ def sync_existing_blobs():
             )
         )
 
+
     user_db.commit()
 
     user_db.close()
@@ -462,6 +519,7 @@ def file_too_large(error):
             "message":
                 "File is too large. Maximum size is 100 MB."
         }), 413
+
 
     return (
         "File too large. Maximum size is 100 MB.",
@@ -500,11 +558,14 @@ def home():
 
     files = []
 
+
     if user:
 
         sync_existing_blobs()
 
+
         db = get_db()
+
 
         rows = db.execute(
             """
@@ -522,26 +583,33 @@ def home():
             (user["id"],)
         ).fetchall()
 
+
         db.close()
+
 
         for file in rows:
 
             item = dict(file)
 
+
             item["size_display"] = format_size(
                 item["size_bytes"]
             )
 
+
             item["is_owner"] = (
                 item["owner_id"] == user["id"]
             )
+
 
             item["can_manage"] = can_manage_file(
                 file,
                 user
             )
 
+
             files.append(item)
+
 
     return render_template(
         "index.html",
@@ -567,6 +635,7 @@ def signup():
             url_for("home")
         )
 
+
     if request.method == "POST":
 
         username = request.form.get(
@@ -574,20 +643,24 @@ def signup():
             ""
         ).strip()
 
+
         email = request.form.get(
             "email",
             ""
         ).strip().lower()
+
 
         password = request.form.get(
             "password",
             ""
         )
 
+
         confirm_password = request.form.get(
             "confirm_password",
             ""
         )
+
 
         if not username or not email or not password:
 
@@ -596,9 +669,11 @@ def signup():
                 "error"
             )
 
+
             return render_template(
                 "signup.html"
             )
+
 
         if password != confirm_password:
 
@@ -607,9 +682,11 @@ def signup():
                 "error"
             )
 
+
             return render_template(
                 "signup.html"
             )
+
 
         if len(password) < 6:
 
@@ -618,11 +695,14 @@ def signup():
                 "error"
             )
 
+
             return render_template(
                 "signup.html"
             )
 
+
         db = get_db()
+
 
         existing = db.execute(
             """
@@ -637,22 +717,27 @@ def signup():
             )
         ).fetchone()
 
+
         if existing:
 
             db.close()
+
 
             flash(
                 "Username or email already exists.",
                 "error"
             )
 
+
             return render_template(
                 "signup.html"
             )
 
+
         existing_users = db.execute(
             "SELECT COUNT(*) AS count FROM users"
         ).fetchone()["count"]
+
 
         # First registered account becomes admin
         is_admin = (
@@ -660,6 +745,7 @@ def signup():
             if existing_users == 0
             else 0
         )
+
 
         db.execute(
             """
@@ -684,19 +770,25 @@ def signup():
             )
         )
 
+
         db.commit()
+
 
         user_id = db.execute(
             "SELECT last_insert_rowid()"
         ).fetchone()[0]
 
+
         db.close()
 
+
         session["user_id"] = user_id
+
 
         return redirect(
             url_for("home")
         )
+
 
     return render_template(
         "signup.html"
@@ -719,6 +811,7 @@ def login():
             url_for("home")
         )
 
+
     if request.method == "POST":
 
         # login.html sends "identifier"
@@ -728,12 +821,15 @@ def login():
             ""
         ).strip().lower()
 
+
         password = request.form.get(
             "password",
             ""
         )
 
+
         db = get_db()
+
 
         user = db.execute(
             """
@@ -748,7 +844,9 @@ def login():
             )
         ).fetchone()
 
+
         db.close()
+
 
         if (
             not user
@@ -763,15 +861,19 @@ def login():
                 "error"
             )
 
+
             return render_template(
                 "login.html"
             )
 
+
         session["user_id"] = user["id"]
+
 
         return redirect(
             url_for("home")
         )
+
 
     return render_template(
         "login.html"
@@ -786,6 +888,7 @@ def login():
 def logout():
 
     session.clear()
+
 
     return redirect(
         url_for("home")
@@ -805,6 +908,7 @@ def upload_file():
 
     user = get_current_user()
 
+
     if "file" not in request.files:
 
         return jsonify({
@@ -812,7 +916,9 @@ def upload_file():
             "message": "No file selected."
         }), 400
 
+
     uploaded_file = request.files["file"]
+
 
     if not uploaded_file.filename:
 
@@ -821,16 +927,19 @@ def upload_file():
             "message": "No file selected."
         }), 400
 
+
     visibility = request.form.get(
         "visibility",
         "private"
     ).lower()
 
-    if visibility not in VALID_VISIBILITY:
 
+    if visibility not in VALID_VISIBILITY:
         visibility = "private"
 
+
     file_data = uploaded_file.read()
+
 
     if len(file_data) > MAX_FILE_SIZE:
 
@@ -840,9 +949,11 @@ def upload_file():
                 "File is too large. Maximum size is 100 MB."
         }), 413
 
+
     original_name = Path(
         uploaded_file.filename
     ).name
+
 
     blob_name = (
         f"{user['id']}/"
@@ -850,9 +961,11 @@ def upload_file():
         f"{original_name}"
     )
 
+
     blob_client = container_client.get_blob_client(
         blob_name
     )
+
 
     try:
 
@@ -863,7 +976,9 @@ def upload_file():
             standard_blob_tier=StandardBlobTier.HOT
         )
 
+
         db = get_db()
+
 
         db.execute(
             """
@@ -892,14 +1007,17 @@ def upload_file():
             )
         )
 
+
         db.commit()
 
         db.close()
+
 
         return jsonify({
             "success": True,
             "message": "File uploaded successfully."
         })
+
 
     except Exception as error:
 
@@ -908,22 +1026,21 @@ def upload_file():
             repr(error)
         )
 
+
         try:
 
             blob_client.delete_blob()
 
         except Exception:
-
             pass
+
 
         return jsonify({
             "success": False,
             "message":
                 "Upload failed. Check the Flask terminal."
         }), 500
-
-
-# =========================================================
+    # =========================================================
 # DOWNLOAD
 # =========================================================
 
@@ -937,9 +1054,11 @@ def download_file(file_id):
 
     file = get_file_record(file_id)
 
+
     if not file:
 
         abort(404)
+
 
     if not can_view_file(
         file,
@@ -947,6 +1066,7 @@ def download_file(file_id):
     ):
 
         abort(403)
+
 
     # Archive files are offline.
     if file["access_tier"] == "Archive":
@@ -957,19 +1077,25 @@ def download_file(file_id):
             409
         )
 
+
     try:
 
         blob_client = container_client.get_blob_client(
             file["blob_name"]
         )
 
+
         stream = io.BytesIO()
+
 
         download = blob_client.download_blob()
 
+
         download.readinto(stream)
 
+
         stream.seek(0)
+
 
         return send_file(
             stream,
@@ -977,12 +1103,14 @@ def download_file(file_id):
             download_name=file["original_name"]
         )
 
+
     except Exception as error:
 
         print(
             "DOWNLOAD ERROR:",
             repr(error)
         )
+
 
         return (
             "Unable to download the file.",
@@ -1005,12 +1133,14 @@ def delete_file(file_id):
 
     file = get_file_record(file_id)
 
+
     if not file:
 
         return jsonify({
             "success": False,
             "message": "File not found."
         }), 404
+
 
     if not can_manage_file(
         file,
@@ -1023,15 +1153,19 @@ def delete_file(file_id):
                 "You can only delete your own files."
         }), 403
 
+
     try:
 
         blob_client = container_client.get_blob_client(
             file["blob_name"]
         )
 
+
         blob_client.delete_blob()
 
+
         db = get_db()
+
 
         db.execute(
             """
@@ -1041,14 +1175,17 @@ def delete_file(file_id):
             (file_id,)
         )
 
+
         db.commit()
 
         db.close()
+
 
         return jsonify({
             "success": True,
             "message": "File deleted successfully."
         })
+
 
     except Exception as error:
 
@@ -1056,6 +1193,7 @@ def delete_file(file_id):
             "DELETE ERROR:",
             repr(error)
         )
+
 
         return jsonify({
             "success": False,
@@ -1077,12 +1215,14 @@ def share_file(file_id):
 
     file = get_file_record(file_id)
 
+
     if not file:
 
         return jsonify({
             "success": False,
             "message": "File not found."
         }), 404
+
 
     if not can_manage_file(
         file,
@@ -1095,6 +1235,7 @@ def share_file(file_id):
                 "You can only share your own files."
         }), 403
 
+
     # Archive files must be rehydrated first.
     if file["access_tier"] == "Archive":
 
@@ -1104,19 +1245,23 @@ def share_file(file_id):
                 "Archived files must be rehydrated before they can be shared."
         }), 409
 
+
     try:
 
         blob_client = container_client.get_blob_client(
             file["blob_name"]
         )
 
+
         account_name = (
             blob_service_client.account_name
         )
 
+
         credential = (
             blob_service_client.credential
         )
+
 
         # Connection-string clients use an account key.
         account_key = getattr(
@@ -1124,6 +1269,7 @@ def share_file(file_id):
             "account_key",
             None
         )
+
 
         if not account_key:
 
@@ -1133,10 +1279,12 @@ def share_file(file_id):
                     "Unable to generate SAS link."
             }), 500
 
+
         expiry = (
             datetime.now(timezone.utc)
             + timedelta(minutes=10)
         )
+
 
         sas_token = generate_blob_sas(
             account_name=account_name,
@@ -1149,10 +1297,12 @@ def share_file(file_id):
             expiry=expiry
         )
 
+
         url = (
             f"{blob_client.url}"
             f"?{sas_token}"
         )
+
 
         return jsonify({
             "success": True,
@@ -1160,12 +1310,14 @@ def share_file(file_id):
             "expires_in": "10 minutes"
         })
 
+
     except Exception as error:
 
         print(
             "SHARE ERROR:",
             repr(error)
         )
+
 
         return jsonify({
             "success": False,
@@ -1183,6 +1335,7 @@ def admin_panel():
 
     db = get_db()
 
+
     users = db.execute(
         """
         SELECT *
@@ -1190,6 +1343,7 @@ def admin_panel():
         ORDER BY created_at DESC
         """
     ).fetchall()
+
 
     files = db.execute(
         """
@@ -1203,13 +1357,16 @@ def admin_panel():
         """
     ).fetchall()
 
+
     user_count = db.execute(
         "SELECT COUNT(*) AS count FROM users"
     ).fetchone()["count"]
 
+
     file_count = db.execute(
         "SELECT COUNT(*) AS count FROM files"
     ).fetchone()["count"]
+
 
     total_bytes = db.execute(
         """
@@ -1221,7 +1378,9 @@ def admin_panel():
         """
     ).fetchone()["total"]
 
+
     db.close()
+
 
     return render_template(
         "admin.html",
@@ -1248,6 +1407,7 @@ def admin_update_file(file_id):
 
     file = get_file_record(file_id)
 
+
     if not file:
 
         return jsonify({
@@ -1255,17 +1415,21 @@ def admin_update_file(file_id):
             "message": "File not found."
         }), 404
 
+
     data = request.get_json(
         silent=True
     ) or {}
+
 
     new_visibility = data.get(
         "visibility"
     )
 
+
     new_tier = data.get(
         "tier"
     )
+
 
     if new_visibility not in VALID_VISIBILITY:
 
@@ -1274,6 +1438,7 @@ def admin_update_file(file_id):
             "message": "Invalid visibility."
         }), 400
 
+
     if new_tier not in VALID_TIERS:
 
         return jsonify({
@@ -1281,16 +1446,19 @@ def admin_update_file(file_id):
             "message": "Invalid access tier."
         }), 400
 
+
     try:
 
         blob_client = container_client.get_blob_client(
             file["blob_name"]
         )
 
+
         current_tier = (
             file["access_tier"]
             or "Hot"
         )
+
 
         # -------------------------------------------------
         # CHANGE AZURE ACCESS TIER
@@ -1310,17 +1478,20 @@ def admin_update_file(file_id):
                     rehydrate_priority=RehydratePriority.STANDARD
                 )
 
+
             else:
 
                 blob_client.set_standard_blob_tier(
                     StandardBlobTier(new_tier)
                 )
 
+
         # -------------------------------------------------
         # UPDATE APPLICATION DATABASE
         # -------------------------------------------------
 
         db = get_db()
+
 
         db.execute(
             """
@@ -1337,9 +1508,11 @@ def admin_update_file(file_id):
             )
         )
 
+
         db.commit()
 
         db.close()
+
 
         # -------------------------------------------------
         # REHYDRATION MESSAGE
@@ -1355,11 +1528,13 @@ def admin_update_file(file_id):
                 "It may take time before it becomes downloadable."
             )
 
+
         else:
 
             message = (
                 "File settings updated successfully."
             )
+
 
         return jsonify({
             "success": True,
@@ -1368,12 +1543,14 @@ def admin_update_file(file_id):
             "tier": new_tier
         })
 
+
     except Exception as error:
 
         print(
             "ADMIN UPDATE ERROR:",
             repr(error)
         )
+
 
         return jsonify({
             "success": False,
@@ -1396,6 +1573,7 @@ def admin_delete_file(file_id):
 
     file = get_file_record(file_id)
 
+
     if not file:
 
         return jsonify({
@@ -1403,15 +1581,19 @@ def admin_delete_file(file_id):
             "message": "File not found."
         }), 404
 
+
     try:
 
         blob_client = container_client.get_blob_client(
             file["blob_name"]
         )
 
+
         blob_client.delete_blob()
 
+
         db = get_db()
+
 
         db.execute(
             """
@@ -1421,14 +1603,17 @@ def admin_delete_file(file_id):
             (file_id,)
         )
 
+
         db.commit()
 
         db.close()
+
 
         return jsonify({
             "success": True,
             "message": "File deleted successfully."
         })
+
 
     except Exception as error:
 
@@ -1436,6 +1621,7 @@ def admin_delete_file(file_id):
             "ADMIN DELETE ERROR:",
             repr(error)
         )
+
 
         return jsonify({
             "success": False,

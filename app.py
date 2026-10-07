@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 from functools import wraps
 import io
 import sqlite3
@@ -51,15 +52,25 @@ DATABASE = BASE_DIR / "cloud_workspace.db"
 # ENVIRONMENT
 # =========================================================
 
+# Load local .env for development.
+# On Vercel, environment variables are supplied by Vercel.
 config = dotenv_values(ENV_FILE)
 
-AZURE_CONNECTION_STRING = config.get(
-    "AZURE_STORAGE_CONNECTION_STRING"
+AZURE_CONNECTION_STRING = (
+    os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
+    or config.get("AZURE_STORAGE_CONNECTION_STRING")
 )
 
-AZURE_CONTAINER_NAME = config.get(
-    "AZURE_CONTAINER_NAME",
-    "files"
+AZURE_CONTAINER_NAME = (
+    os.environ.get("AZURE_CONTAINER_NAME")
+    or config.get("AZURE_CONTAINER_NAME")
+    or "files"
+)
+
+FLASK_SECRET_KEY = (
+    os.environ.get("FLASK_SECRET_KEY")
+    or config.get("FLASK_SECRET_KEY")
+    or "cloud-workspace-development-secret-change-this"
 )
 
 
@@ -73,10 +84,7 @@ app.config["MAX_CONTENT_LENGTH"] = (
     102 * 1024 * 1024
 )
 
-app.secret_key = config.get(
-    "FLASK_SECRET_KEY",
-    "cloud-workspace-development-secret-change-this"
-)
+app.secret_key = FLASK_SECRET_KEY
 
 
 # =========================================================
@@ -86,9 +94,9 @@ app.secret_key = config.get(
 MAX_FILE_SIZE_MB = 100
 
 MAX_FILE_SIZE = (
-    MAX_FILE_SIZE_MB *
-    1024 *
-    1024
+    MAX_FILE_SIZE_MB
+    * 1024
+    * 1024
 )
 
 
@@ -98,7 +106,8 @@ MAX_FILE_SIZE = (
 
 if not AZURE_CONNECTION_STRING:
     raise RuntimeError(
-        "AZURE_STORAGE_CONNECTION_STRING is missing from .env"
+        "AZURE_STORAGE_CONNECTION_STRING is missing. "
+        "Set it in .env locally or in Vercel Environment Variables."
     )
 
 
@@ -117,7 +126,6 @@ container_client = (
 # =========================================================
 
 def get_db():
-
     db = sqlite3.connect(
         DATABASE
     )
@@ -905,6 +913,7 @@ def upload_file():
             blob_client.delete_blob()
 
         except Exception:
+
             pass
 
         return jsonify({

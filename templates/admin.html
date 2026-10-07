@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Panel — Cloud Workspace</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body class="admin-page-body">
+
+<div class="liquid-background">
+
+    <div class="blob blob-one"></div>
+    <div class="blob blob-two"></div>
+    <div class="blob blob-three"></div>
+
+</div>
+
+
+<div class="admin-page">
+
+    <!-- TOPBAR -->
+
+    <header class="admin-topbar">
+
+        <div class="admin-heading">
+
+            <a
+                href="{{ url_for('home') }}"
+                class="admin-back"
+            >
+                ← Cloud Workspace
+            </a>
+
+            <div class="eyebrow">
+                ADMINISTRATION
+            </div>
+
+            <h1>
+                Admin Panel
+            </h1>
+
+            <p>
+                Manage users, visibility, storage tiers,
+                and files across the workspace.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('logout') }}"
+            class="login-button admin-logout"
+        >
+            Logout
+        </a>
+
+    </header>
+
+
+    <!-- STATISTICS -->
+
+    <section class="admin-stats">
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                👥
+            </div>
+
+            <div class="admin-stat-info">
+
+                <strong>
+                    {{ user_count }}
+                </strong>
+
+                <p>
+                    Total Users
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                📄
+            </div>
+
+            <div class="admin-stat-info">
+
+                <strong>
+                    {{ file_count }}
+                </strong>
+
+                <p>
+                    Total Files
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                ☁
+            </div>
+
+            <div class="admin-stat-info">
+
+                <strong>
+                    {{ total_storage }}
+                </strong>
+
+                <p>
+                    Storage Used
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- USERS -->
+
+    <section class="admin-card">
+
+        <div class="admin-section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    ACCOUNTS
+                </span>
+
+                <h2>
+                    Registered Users
+                </h2>
+
+                <p>
+                    All accounts currently registered
+                    in Cloud Workspace.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>User</th>
+
+                        <th>Email</th>
+
+                        <th>Role</th>
+
+                        <th>Created</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for user in users %}
+
+                    <tr>
+
+                        <td>
+
+                            <div class="table-user">
+
+                                <div class="avatar small">
+                                    {{ user["username"][0]|upper }}
+                                </div>
+
+                                <strong>
+                                    {{ user["username"] }}
+                                </strong>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            {{ user["email"] }}
+                        </td>
+
+
+                        <td>
+
+                            {% if user["is_admin"] %}
+
+                            <span class="role-badge admin">
+                                Admin
+                            </span>
+
+                            {% else %}
+
+                            <span class="role-badge">
+                                User
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ user["created_at"][:10] }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- FILES -->
+
+    <section class="admin-card">
+
+        <div class="admin-section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    STORAGE CONTROL
+                </span>
+
+                <h2>
+                    All Files
+                </h2>
+
+                <p>
+                    Control visibility and Azure Blob
+                    Storage access tiers.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table admin-files-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            File
+                        </th>
+
+                        <th>
+                            Owner
+                        </th>
+
+                        <th>
+                            Visibility
+                        </th>
+
+                        <th>
+                            Access Tier
+                        </th>
+
+                        <th>
+                            Size
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for file in files %}
+
+                    <tr
+                        id="admin-file-{{ file['id'] }}"
+                    >
+
+                        <!-- FILE -->
+
+                        <td>
+
+                            <div class="admin-file-name">
+
+                                <span class="admin-file-icon">
+                                    📄
+                                </span>
+
+                                <strong
+                                    title="{{ file['original_name'] }}"
+                                >
+                                    {{ file["original_name"] }}
+                                </strong>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- OWNER -->
+
+                        <td>
+
+                            <span class="admin-owner">
+                                {{ file["owner_name"] }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- VISIBILITY -->
+
+                        <td>
+
+                            <select
+                                class="admin-select visibility-select"
+                                data-current="{{ file['visibility'] }}"
+                            >
+
+                                <option
+                                    value="private"
+                                    {% if file["visibility"] == "private" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    🔒 Private
+                                </option>
+
+                                <option
+                                    value="public"
+                                    {% if file["visibility"] == "public" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    🌐 Public
+                                </option>
+
+                            </select>
+
+                        </td>
+
+
+                        <!-- ACCESS TIER -->
+
+                        <td>
+
+                            <select
+                                class="admin-select tier-select"
+                                data-current="{{ file['access_tier'] or 'Hot' }}"
+                            >
+
+                                <option
+                                    value="Hot"
+                                    {% if (file["access_tier"] or "Hot") == "Hot" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    🔥 Hot
+                                </option>
+
+                                <option
+                                    value="Cool"
+                                    {% if file["access_tier"] == "Cool" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    ❄️ Cool
+                                </option>
+
+                                <option
+                                    value="Cold"
+                                    {% if file["access_tier"] == "Cold" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    🧊 Cold
+                                </option>
+
+                                <option
+                                    value="Archive"
+                                    {% if file["access_tier"] == "Archive" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    🗄️ Archive
+                                </option>
+
+                            </select>
+
+                        </td>
+
+
+                        <!-- SIZE -->
+
+                        <td>
+
+                            <span class="admin-file-size">
+
+                                {{
+                                    "%.1f"|format(
+                                        file["size_bytes"]
+                                        / 1024
+                                        / 1024
+                                    )
+                                }}
+                                MB
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <div class="admin-file-actions">
+
+                                <button
+                                    type="button"
+                                    class="admin-update-button"
+                                    data-id="{{ file['id'] }}"
+                                >
+                                    Save
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="admin-delete-button"
+                                    data-id="{{ file['id'] }}"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast"
+>
+
+    <span id="toastIcon">
+        ✓
+    </span>
+
+    <span id="toastMessage">
+        Done
+    </span>
+
+</div>
+
+
+<script>
+
+function showToast(message, success = true) {
+
+    const toast =
+        document.getElementById("toast");
+
+    const text =
+        document.getElementById("toastMessage");
+
+    const icon =
+        document.getElementById("toastIcon");
+
+
+    text.textContent = message;
+
+    icon.textContent =
+        success ? "✓" : "!";
+
+
+    toast.classList.add("show");
+
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    }, 3500);
+}
+
+
+// =========================================================
+// SAVE FILE SETTINGS
+// =========================================================
+
+document
+    .querySelectorAll(".admin-update-button")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            async () => {
+
+                const fileId =
+                    button.dataset.id;
+
+
+                const row =
+                    document.getElementById(
+                        `admin-file-${fileId}`
+                    );
+
+
+                const visibility =
+                    row.querySelector(
+                        ".visibility-select"
+                    ).value;
+
+
+                const tier =
+                    row.querySelector(
+                        ".tier-select"
+                    ).value;
+
+
+                // Archive warning
+
+                if (tier === "Archive") {
+
+                    const confirmed =
+                        confirm(
+                            "Move this file to Azure Archive?\n\n" +
+                            "Archived files are offline and cannot be " +
+                            "downloaded until they are rehydrated."
+                        );
+
+
+                    if (!confirmed) {
+                        return;
+                    }
+                }
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    "Saving...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `/admin/update-file/${fileId}`,
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    visibility:
+                                        visibility,
+
+                                    tier:
+                                        tier
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !data.success
+                    ) {
+
+                        showToast(
+                            data.message ||
+                            "Update failed.",
+                            false
+                        );
+
+                        return;
+                    }
+
+
+                    showToast(
+                        data.message ||
+                        "File settings updated."
+                    );
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+
+                    showToast(
+                        "Something went wrong.",
+                        false
+                    );
+
+                } finally {
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        "Save";
+                }
+
+            }
+        );
+
+    });
+
+
+// =========================================================
+// DELETE FILE
+// =========================================================
+
+document
+    .querySelectorAll(".admin-delete-button")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            async () => {
+
+                const fileId =
+                    button.dataset.id;
+
+
+                const confirmed =
+                    confirm(
+                        "Are you sure you want to permanently delete this file?"
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    "Deleting...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `/admin/delete-file/${fileId}`,
+                            {
+                                method: "POST"
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !data.success
+                    ) {
+
+                        showToast(
+                            data.message ||
+                            "Delete failed.",
+                            false
+                        );
+
+                        return;
+                    }
+
+
+                    const row =
+                        document.getElementById(
+                            `admin-file-${fileId}`
+                        );
+
+
+                    if (row) {
+                        row.remove();
+                    }
+
+
+                    showToast(
+                        "File deleted successfully."
+                    );
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+
+                    showToast(
+                        "Something went wrong.",
+                        false
+                    );
+
+                } finally {
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        "Delete";
+                }
+
+            }
+        );
+
+    });
+
+</script>
+
+</body>
+</html>

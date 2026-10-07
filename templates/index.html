@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cloud Workspace — Azure File Manager</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="liquid-background">
+    <div class="blob blob-one"></div>
+    <div class="blob blob-two"></div>
+    <div class="blob blob-three"></div>
+</div>
+
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">☁</div>
+
+            <div>
+                <div class="brand-name">
+                    Cloud Workspace
+                </div>
+
+                <div class="brand-subtitle">
+                    Azure File Manager
+                </div>
+            </div>
+
+        </div>
+
+
+        <nav class="side-navigation">
+
+            <a
+                href="{{ url_for('home') }}"
+                class="nav-item active"
+            >
+                <span>◫</span>
+                <span>My Files</span>
+            </a>
+
+
+            {% if user and user["is_admin"] %}
+
+            <a
+                href="{{ url_for('admin_panel') }}"
+                class="nav-item"
+            >
+                <span>▦</span>
+                <span>Admin Panel</span>
+            </a>
+
+            {% endif %}
+
+
+            {% if user %}
+
+            <button
+                type="button"
+                class="nav-item"
+                id="openSettings"
+            >
+                <span>⚙</span>
+                <span>Settings</span>
+            </button>
+
+            {% endif %}
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="security-card">
+
+                <div class="security-icon">
+                    🔐
+                </div>
+
+                <div>
+                    <strong>Private storage</strong>
+
+                    <p>
+                        Secured by Azure Blob Storage
+                    </p>
+                </div>
+
+            </div>
+
+
+            {% if user %}
+
+            <div class="sidebar-user">
+
+                <div class="avatar">
+                    {{ user["username"][0]|upper }}
+                </div>
+
+                <div class="sidebar-user-info">
+
+                    <strong>
+                        {{ user["username"] }}
+                    </strong>
+
+                    <span>
+                        {% if user["is_admin"] %}
+                            Administrator
+                        {% else %}
+                            User
+                        {% endif %}
+                    </span>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="sidebar-user logged-out-user">
+
+                <div class="avatar">
+                    ?
+                </div>
+
+                <div class="sidebar-user-info">
+
+                    <strong>
+                        Guest
+                    </strong>
+
+                    <span>
+                        Not signed in
+                    </span>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="mobile-brand">
+                ☁ Cloud Workspace
+            </div>
+
+
+            <div class="topbar-right">
+
+                <div class="azure-status">
+                    <span class="status-dot"></span>
+                    Azure Connected
+                </div>
+
+
+                {% if user %}
+
+                <div class="profile-wrapper">
+
+                    <button
+                        type="button"
+                        class="profile-chip"
+                        id="profileButton"
+                    >
+
+                        <div class="avatar small">
+                            {{ user["username"][0]|upper }}
+                        </div>
+
+                        <div class="profile-name">
+                            {{ user["username"] }}
+                        </div>
+
+                        <span class="profile-arrow">
+                            ▾
+                        </span>
+
+                    </button>
+
+
+                    <div
+                        class="profile-dropdown"
+                        id="profileDropdown"
+                    >
+
+                        <button
+                            type="button"
+                            id="profileSettings"
+                        >
+                            ⚙ Settings
+                        </button>
+
+
+                        {% if user["is_admin"] %}
+
+                        <a href="{{ url_for('admin_panel') }}">
+                            ▦ Admin Panel
+                        </a>
+
+                        {% endif %}
+
+
+                        <a href="{{ url_for('logout') }}">
+                            ↪ Logout
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="auth-actions">
+
+                    <a
+                        href="{{ url_for('login') }}"
+                        class="login-button"
+                    >
+                        Login
+                    </a>
+
+                    <a
+                        href="{{ url_for('signup') }}"
+                        class="signup-button"
+                    >
+                        Sign Up
+                    </a>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </header>
+
+
+        <!-- HERO -->
+
+        <section class="hero-section">
+
+            <div class="hero-copy">
+
+                {% if user %}
+
+                <div class="eyebrow">
+                    PERSONAL CLOUD
+                </div>
+
+                {% else %}
+
+                <div class="eyebrow">
+                    AZURE CLOUD STORAGE
+                </div>
+
+                {% endif %}
+
+
+                <h1>
+                    Your cloud,<br>
+                    your workspace.
+                </h1>
+
+                <p>
+                    Securely upload, manage, and share your files
+                    using Azure Blob Storage.
+                </p>
+
+            </div>
+
+
+            <div class="hero-decoration">
+
+                <div class="hero-orbit"></div>
+
+                <div class="hero-cloud">
+                    ☁
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             GUEST VIEW
+        =================================================== -->
+
+        {% if not user %}
+
+        <section class="guest-panel">
+
+            <div class="guest-icon">
+                🔐
+            </div>
+
+
+            <div class="guest-content">
+
+                <span class="eyebrow">
+                    AUTHENTICATION REQUIRED
+                </span>
+
+                <h2>
+                    Sign in to access your files
+                </h2>
+
+                <p>
+                    Your files are protected by real server-side
+                    authentication. Create an account or sign in
+                    to upload and manage your cloud files.
+                </p>
+
+
+                <div class="guest-actions">
+
+                    <a
+                        href="{{ url_for('login') }}"
+                        class="primary-button"
+                    >
+                        Sign In
+                    </a>
+
+                    <a
+                        href="{{ url_for('signup') }}"
+                        class="secondary-button"
+                    >
+                        Create Account
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="feature-grid">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🔒
+                </div>
+
+                <h3>
+                    Private Storage
+                </h3>
+
+                <p>
+                    Your files are protected behind
+                    authenticated access.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ☁
+                </div>
+
+                <h3>
+                    Azure Powered
+                </h3>
+
+                <p>
+                    Files are stored securely in
+                    Azure Blob Storage.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🔗
+                </div>
+
+                <h3>
+                    Secure Sharing
+                </h3>
+
+                <p>
+                    Generate temporary SAS links
+                    for your own files.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        {% else %}
+
+
+        <!-- ==================================================
+             LOGGED-IN DASHBOARD
+        =================================================== -->
+
+        <section class="dashboard-header">
+
+            <div>
+
+                <div class="eyebrow">
+                    MY CLOUD
+                </div>
+
+                <h2>
+                    Your files
+                </h2>
+
+                <p>
+                    Manage your personal Azure workspace.
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-stats">
+
+                <div class="mini-stat">
+
+                    <strong>
+                        {{ files|length }}
+                    </strong>
+
+                    <span>
+                        Visible files
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- UPLOAD -->
+
+        <section class="upload-card">
+
+            <form
+                id="uploadForm"
+                enctype="multipart/form-data"
+            >
+
+                <div
+                    class="drop-zone"
+                    id="dropZone"
+                >
+
+                    <input
+                        type="file"
+                        id="fileInput"
+                        name="file"
+                        hidden
+                    >
+
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+                    <h3>
+                        Drop your file here
+                    </h3>
+
+                    <p>
+                        or click to browse your computer
+                    </p>
+
+
+                    <button
+                        type="button"
+                        class="browse-button"
+                        id="browseButton"
+                    >
+                        Choose File
+                    </button>
+
+
+                    <div
+                        class="selected-file"
+                        id="selectedFile"
+                        hidden
+                    >
+
+                        <div class="selected-file-icon">
+                            📄
+                        </div>
+
+                        <div>
+
+                            <strong id="selectedFileName">
+                                File
+                            </strong>
+
+                            <span id="selectedFileSize">
+                                0 MB
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VISIBILITY -->
+
+                <div class="visibility-section">
+
+                    <div class="section-label">
+                        File visibility
+                    </div>
+
+
+                    <div class="visibility-options">
+
+                        <label class="visibility-option">
+
+                            <input
+                                type="radio"
+                                name="visibility"
+                                value="private"
+                                checked
+                            >
+
+                            <div class="visibility-content">
+
+                                <span class="visibility-icon">
+                                    🔒
+                                </span>
+
+                                <div>
+
+                                    <strong>
+                                        Private
+                                    </strong>
+
+                                    <p>
+                                        Only you and admin can access
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+
+                        <label class="visibility-option">
+
+                            <input
+                                type="radio"
+                                name="visibility"
+                                value="public"
+                            >
+
+                            <div class="visibility-content">
+
+                                <span class="visibility-icon">
+                                    🌐
+                                </span>
+
+                                <div>
+
+                                    <strong>
+                                        Public
+                                    </strong>
+
+                                    <p>
+                                        Other users can view/download
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <div class="upload-footer">
+
+                    <div class="upload-limit">
+
+                        Maximum file size:
+                        <strong>
+                            100 MB
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="upload-button"
+                        id="uploadButton"
+                    >
+                        Upload to Azure
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="progress-wrapper"
+                    id="progressWrapper"
+                    hidden
+                >
+
+                    <div class="progress-top">
+
+                        <span>
+                            Uploading...
+                        </span>
+
+                        <span id="progressPercent">
+                            0%
+                        </span>
+
+                    </div>
+
+                    <div class="progress-track">
+
+                        <div
+                            class="progress-bar"
+                            id="progressBar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- FILE TOOLBAR -->
+
+        <section class="files-toolbar">
+
+            <div>
+
+                <h3>
+                    Files
+                </h3>
+
+                <span>
+                    Your files and public files
+                </span>
+
+            </div>
+
+
+            <div class="search-box">
+
+                <span>
+                    ⌕
+                </span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search files..."
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- FILES -->
+
+        <section
+            class="file-grid"
+            id="fileGrid"
+        >
+
+            {% if files %}
+
+                {% for file in files %}
+
+                <article
+                    class="file-card"
+                    data-name="{{ file['original_name']|lower }}"
+                >
+
+                    <div class="file-card-top">
+
+                        <div class="file-type-icon">
+                            📄
+                        </div>
+
+
+                        <div class="file-menu">
+
+                            {% if file["can_manage"] %}
+
+                            <button
+                                type="button"
+                                class="icon-button file-share"
+                                data-id="{{ file['id'] }}"
+                                title="Share"
+                            >
+                                ↗
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="icon-button danger file-delete"
+                                data-id="{{ file['id'] }}"
+                                data-name="{{ file['original_name'] }}"
+                                title="Delete"
+                            >
+                                ×
+                            </button>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="file-card-body">
+
+                        <h4 title="{{ file['original_name'] }}">
+                            {{ file['original_name'] }}
+                        </h4>
+
+
+                        <div class="file-meta">
+
+                            <span>
+                                {{ file["size_display"] }}
+                            </span>
+
+                            <span>
+                                •
+                            </span>
+
+
+                            {% if file["visibility"] == "public" %}
+
+                            <span class="visibility-badge public">
+                                🌐 Public
+                            </span>
+
+                            {% else %}
+
+                            <span class="visibility-badge private">
+                                🔒 Private
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if not file["is_owner"] %}
+
+                        <div class="owner-label">
+
+                            Shared by
+
+                            <strong>
+                                {{ file["owner_name"] }}
+                            </strong>
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <a
+                        href="{{ url_for('download_file', file_id=file['id']) }}"
+                        class="download-button"
+                    >
+                        ↓ Download
+                    </a>
+
+                </article>
+
+                {% endfor %}
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ☁
+                </div>
+
+                <h3>
+                    No files yet
+                </h3>
+
+                <p>
+                    Upload your first file to your Azure workspace.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <div
+            class="no-search-results"
+            id="noSearchResults"
+            hidden
+        >
+
+            <h3>
+                No matching files
+            </h3>
+
+            <p>
+                Try a different search term.
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+    </main>
+
+</div>
+
+
+<!-- ======================================================
+     SETTINGS MODAL
+======================================================= -->
+
+{% if user %}
+
+<div
+    class="modal-overlay"
+    id="settingsModal"
+    hidden
+>
+
+    <div class="modal settings-modal">
+
+        <button
+            class="modal-close"
+            data-close="settingsModal"
+        >
+            ×
+        </button>
+
+
+        <div class="modal-heading">
+
+            <span class="eyebrow">
+                PREFERENCES
+            </span>
+
+            <h2>
+                Settings
+            </h2>
+
+            <p>
+                Manage your Cloud Workspace experience.
+            </p>
+
+        </div>
+
+
+        <div class="settings-list">
+
+            <div class="settings-row">
+
+                <div>
+
+                    <strong>
+                        Account
+                    </strong>
+
+                    <span>
+                        {{ user["email"] }}
+                    </span>
+
+                </div>
+
+
+                <span class="account-badge">
+
+                    {% if user["is_admin"] %}
+                        Admin
+                    {% else %}
+                        User
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div>
+
+                    <strong>
+                        Theme
+                    </strong>
+
+                    <span>
+                        Choose your interface appearance
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="theme-switch"
+                    id="themeSwitch"
+                >
+                    <span></span>
+                </button>
+
+            </div>
+
+
+            {% if user["is_admin"] %}
+
+            <a
+                href="{{ url_for('admin_panel') }}"
+                class="settings-action"
+            >
+
+                <span>
+                    ▦
+                </span>
+
+                <div>
+
+                    <strong>
+                        Admin Panel
+                    </strong>
+
+                    <span>
+                        Manage users and files
+                    </span>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+            {% endif %}
+
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="settings-action logout-action"
+            >
+
+                <span>
+                    ↪
+                </span>
+
+                <div>
+
+                    <strong>
+                        Logout
+                    </strong>
+
+                    <span>
+                        Sign out of this account
+                    </span>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- ======================================================
+     SHARE MODAL
+======================================================= -->
+
+<div
+    class="modal-overlay"
+    id="shareModal"
+    hidden
+>
+
+    <div class="modal share-modal">
+
+        <button
+            class="modal-close"
+            data-close="shareModal"
+        >
+            ×
+        </button>
+
+
+        <div class="modal-heading">
+
+            <span class="eyebrow">
+                SECURE SHARING
+            </span>
+
+            <h2>
+                Share file
+            </h2>
+
+            <p>
+                This temporary Azure SAS link expires in 10 minutes.
+            </p>
+
+        </div>
+
+
+        <div class="share-link-box">
+
+            <input
+                type="text"
+                id="shareLink"
+                readonly
+            >
+
+            <button
+                type="button"
+                id="copyShareLink"
+            >
+                Copy
+            </button>
+
+        </div>
+
+
+        <div class="share-warning">
+            Anyone with this link can access the file until it expires.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     DELETE MODAL
+======================================================= -->
+
+<div
+    class="modal-overlay"
+    id="deleteModal"
+    hidden
+>
+
+    <div class="modal delete-modal">
+
+        <button
+            class="modal-close"
+            data-close="deleteModal"
+        >
+            ×
+        </button>
+
+
+        <div class="delete-icon">
+            ×
+        </div>
+
+
+        <h2>
+            Delete file?
+        </h2>
+
+
+        <p>
+            You are about to permanently delete:
+        </p>
+
+
+        <strong id="deleteFileName">
+            file
+        </strong>
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="secondary-button"
+                data-close="deleteModal"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="button"
+                class="danger-button"
+                id="confirmDelete"
+            >
+                Delete File
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast"
+>
+
+    <span id="toastIcon">
+        ✓
+    </span>
+
+    <span id="toastMessage">
+        Done
+    </span>
+
+</div>
+
+
+<!-- ======================================================
+     JAVASCRIPT
+======================================================= -->
+
+<script>
+    window.CLOUD_CONFIG = {};
+</script>
+
+<script
+    src="{{ url_for('static', filename='app.js') }}"
+></script>
+
+</body>
+</html>

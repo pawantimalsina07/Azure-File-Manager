@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login — Cloud Workspace</title>
+
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+
+    <style>
+
+        /* =====================================================
+           AUTH PAGE — SHARED LOGIN / SIGNUP STYLE
+           ===================================================== */
+
+        .auth-card {
+            max-width: 500px;
+        }
+
+
+        .auth-back {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+
+        .auth-logo {
+            width: 70px;
+            height: 70px;
+
+            font-size: 32px;
+
+            margin-bottom: 26px;
+        }
+
+
+        .auth-heading .eyebrow {
+            font-size: 13px;
+            font-weight: 800;
+
+            letter-spacing: 0.14em;
+        }
+
+
+        .auth-heading h1 {
+            font-size: clamp(36px, 5vw, 46px);
+            line-height: 1.08;
+
+            margin: 10px 0 12px;
+
+            font-weight: 800;
+        }
+
+
+        .auth-heading p {
+            font-size: 16px;
+            line-height: 1.55;
+
+            margin-bottom: 27px;
+        }
+
+
+        .auth-field {
+            margin-bottom: 18px;
+        }
+
+
+        .auth-field label {
+            display: block;
+
+            font-size: 14px;
+            font-weight: 800;
+
+            margin-bottom: 8px;
+        }
+
+
+        .auth-field input {
+            width: 100%;
+
+            min-height: 54px;
+
+            padding: 0 16px;
+
+            box-sizing: border-box;
+
+            font-family: inherit;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            border-radius: 15px;
+        }
+
+
+        .auth-field input::placeholder {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+
+        .auth-submit {
+            width: 100%;
+
+            min-height: 56px;
+
+            margin-top: 5px;
+
+            font-family: inherit;
+
+            font-size: 16px;
+            font-weight: 800;
+
+            border-radius: 16px;
+
+            cursor: pointer;
+        }
+
+
+        .auth-switch {
+            margin-top: 23px;
+
+            font-size: 14px;
+            line-height: 1.6;
+
+            text-align: center;
+        }
+
+
+        .auth-switch a {
+            font-weight: 800;
+        }
+
+
+        .flash-message {
+            padding: 13px 15px;
+
+            margin-bottom: 20px;
+
+            border-radius: 14px;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+
+        @media (max-width: 600px) {
+
+            .auth-card {
+                width: calc(100% - 32px);
+            }
+
+            .auth-heading h1 {
+                font-size: 36px;
+            }
+
+            .auth-heading p {
+                font-size: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="liquid-background">
+
+    <div class="blob blob-one"></div>
+    <div class="blob blob-two"></div>
+    <div class="blob blob-three"></div>
+
+</div>
+
+
+<main class="auth-page">
+
+    <div class="auth-card">
+
+
+        <a
+            href="{{ url_for('home') }}"
+            class="auth-back"
+        >
+            ← Cloud Workspace
+        </a>
+
+
+        <div class="auth-logo">
+            ☁
+        </div>
+
+
+        <div class="auth-heading">
+
+            <span class="eyebrow">
+                CLOUD WORKSPACE
+            </span>
+
+            <h1>
+                Welcome back
+            </h1>
+
+            <p>
+                Sign in to manage your Azure files.
+            </p>
+
+        </div>
+
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                <div class="flash-message">
+                    {{ message }}
+                </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <form
+            class="auth-form"
+            method="POST"
+            action="{{ url_for('login') }}"
+        >
+
+
+            <div class="auth-field">
+
+                <label for="identifier">
+                    Username or Email
+                </label>
+
+                <input
+                    type="text"
+                    id="identifier"
+                    name="identifier"
+                    placeholder="Enter username or email"
+                    required
+                    autocomplete="username"
+                    autofocus
+                >
+
+            </div>
+
+
+            <div class="auth-field">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="auth-submit"
+            >
+                Sign In
+            </button>
+
+        </form>
+
+
+        <div class="auth-switch">
+
+            Don't have an account?
+
+            <a href="{{ url_for('signup') }}">
+                Create one
+            </a>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+</body>
+</html>

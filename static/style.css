@@ -1,0 +1,5106 @@
+/* =========================================================
+   CLOUD WORKSPACE
+   LIQUID GLASS UI
+========================================================= */
+
+:root {
+
+    --bg: #eef4fb;
+
+    --surface: rgba(255, 255, 255, 0.55);
+    --surface-strong: rgba(255, 255, 255, 0.75);
+
+    --border: rgba(255, 255, 255, 0.75);
+
+    --text: #142033;
+    --muted: #6f7d91;
+
+    --primary: #4776e6;
+    --primary-dark: #315bd0;
+
+    --success: #2eae76;
+    --danger: #e45c68;
+
+    --shadow:
+        0 20px 60px rgba(64, 90, 130, 0.12);
+
+    --radius-lg: 26px;
+    --radius-md: 18px;
+    --radius-sm: 12px;
+
+    --transition:
+        0.25s ease;
+
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        "Manrope",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf4ff,
+            #f7faff 45%,
+            #edf7f4
+        );
+
+    overflow-x: hidden;
+
+}
+
+
+body.dark-theme {
+
+    --bg: #101724;
+
+    --surface:
+        rgba(24, 34, 50, 0.65);
+
+    --surface-strong:
+        rgba(25, 36, 53, 0.82);
+
+    --border:
+        rgba(255, 255, 255, 0.10);
+
+    --text: #edf4ff;
+
+    --muted: #98a6ba;
+
+    --shadow:
+        0 20px 60px rgba(0, 0, 0, 0.30);
+
+    background:
+        linear-gradient(
+            135deg,
+            #101724,
+            #151d2c,
+            #101c1d
+        );
+
+}
+
+
+body.modal-open {
+    overflow: hidden;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+button,
+input {
+    font: inherit;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   LIQUID BACKGROUND
+========================================================= */
+
+.liquid-background {
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    overflow: hidden;
+
+    z-index: -1;
+
+}
+
+
+.blob {
+
+    position: absolute;
+
+    width: 420px;
+
+    height: 420px;
+
+    border-radius: 50%;
+
+    filter: blur(70px);
+
+    opacity: 0.30;
+
+}
+
+
+.blob-one {
+
+    top: -150px;
+    left: -100px;
+
+    background: #83aaff;
+
+}
+
+
+.blob-two {
+
+    right: -130px;
+    top: 25%;
+
+    background: #83e4cb;
+
+}
+
+
+.blob-three {
+
+    bottom: -200px;
+    left: 30%;
+
+    background: #bba5ff;
+
+}
+
+
+/* =========================================================
+   APP SHELL
+========================================================= */
+
+.app-shell {
+
+    min-height: 100vh;
+
+    display: flex;
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+
+    position: fixed;
+
+    left: 18px;
+    top: 18px;
+    bottom: 18px;
+
+    width: 260px;
+
+    padding: 24px 16px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    background:
+        var(--surface);
+
+    backdrop-filter: blur(28px);
+
+    -webkit-backdrop-filter: blur(28px);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius-lg);
+
+    box-shadow:
+        var(--shadow);
+
+    z-index: 20;
+
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 4px 8px 30px;
+
+}
+
+
+.brand-icon {
+
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 14px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7298f5,
+            #526fdb
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(71, 118, 230, 0.28);
+
+    font-size: 21px;
+
+}
+
+
+.brand-name {
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.02em;
+
+}
+
+
+.brand-subtitle {
+
+    margin-top: 2px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.side-navigation {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.nav-item {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 14px;
+
+    border: 0;
+
+    border-radius: 14px;
+
+    color: var(--muted);
+
+    background: transparent;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-align: left;
+
+    transition:
+        var(--transition);
+
+}
+
+
+.nav-item span:first-child {
+
+    width: 22px;
+
+    font-size: 17px;
+
+    text-align: center;
+
+}
+
+
+.nav-item:hover,
+.nav-item.active {
+
+    color: var(--text);
+
+    background:
+        rgba(255, 255, 255, 0.48);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(255, 255, 255, 0.4);
+
+}
+
+
+body.dark-theme
+.nav-item:hover,
+body.dark-theme
+.nav-item.active {
+
+    background:
+        rgba(255, 255, 255, 0.07);
+
+}
+
+
+.sidebar-bottom {
+
+    margin-top: auto;
+
+}
+
+
+.security-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 13px;
+
+    margin-bottom: 16px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255, 255, 255, 0.32);
+
+    border:
+        1px solid var(--border);
+
+}
+
+
+.security-icon {
+
+    font-size: 20px;
+
+}
+
+
+.security-card strong {
+
+    display: block;
+
+    font-size: 10px;
+
+}
+
+
+.security-card p {
+
+    margin: 3px 0 0;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.sidebar-user {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 8px;
+
+}
+
+
+.avatar {
+
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7799ef,
+            #5d6ed7
+        );
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+}
+
+
+.avatar.small {
+
+    width: 30px;
+    height: 30px;
+
+    font-size: 10px;
+
+}
+
+
+.sidebar-user-info {
+
+    min-width: 0;
+
+}
+
+
+.sidebar-user-info strong {
+
+    display: block;
+
+    font-size: 10px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.sidebar-user-info span {
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.logged-out-user {
+
+    opacity: 0.7;
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main-content {
+
+    width: calc(
+        100% - 296px
+    );
+
+    margin-left: 296px;
+
+    padding: 18px 28px 50px;
+
+    min-width: 0;
+
+}
+
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar {
+
+    min-height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 30px;
+
+}
+
+
+.mobile-brand {
+
+    display: none;
+
+    font-weight: 800;
+
+}
+
+
+.topbar-right {
+
+    margin-left: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.azure-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    border-radius: 999px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter: blur(20px);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+
+.status-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #3ec487;
+
+    box-shadow:
+        0 0 10px
+        rgba(62, 196, 135, 0.7);
+
+}
+
+
+/* =========================================================
+   AUTH ACTIONS
+========================================================= */
+
+.auth-actions {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+.login-button,
+.signup-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 9px 15px;
+
+    border-radius: 11px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    transition:
+        var(--transition);
+
+}
+
+
+.login-button {
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+}
+
+
+.login-button:hover {
+
+    transform: translateY(-1px);
+
+}
+
+
+.signup-button {
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7196ef,
+            #536dd4
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(71, 118, 230, 0.22);
+
+}
+
+
+.signup-button:hover {
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.profile-wrapper {
+
+    position: relative;
+
+}
+
+
+.profile-chip {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 4px 9px 4px 5px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 999px;
+
+    background:
+        var(--surface);
+
+    color: var(--text);
+
+}
+
+
+.profile-name {
+
+    max-width: 100px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+.profile-arrow {
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+.profile-dropdown {
+
+    position: absolute;
+
+    top: calc(100% + 8px);
+
+    right: 0;
+
+    width: 170px;
+
+    padding: 7px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 15px;
+
+    background:
+        var(--surface-strong);
+
+    backdrop-filter: blur(25px);
+
+    box-shadow:
+        var(--shadow);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+        translateY(-5px);
+
+    transition:
+        var(--transition);
+
+    z-index: 50;
+
+}
+
+
+.profile-dropdown.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translateY(0);
+
+}
+
+
+.profile-dropdown a,
+.profile-dropdown button {
+
+    width: 100%;
+
+    display: block;
+
+    padding: 10px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    text-align: left;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero-section {
+
+    position: relative;
+
+    min-height: 260px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 35px 40px;
+
+    overflow: hidden;
+
+    border-radius:
+        30px;
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(255,255,255,0.66),
+            rgba(255,255,255,0.30)
+        );
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(30px);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+body.dark-theme
+.hero-section {
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(30,42,61,0.80),
+            rgba(25,35,52,0.48)
+        );
+
+}
+
+
+.hero-copy {
+
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 590px;
+
+}
+
+
+.eyebrow {
+
+    display: inline-block;
+
+    margin-bottom: 9px;
+
+    color: var(--primary);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.18em;
+
+}
+
+
+.hero-copy h1 {
+
+    margin: 0;
+
+    font-size:
+        clamp(36px, 5vw, 68px);
+
+    line-height: 0.98;
+
+    letter-spacing:
+        -0.055em;
+
+    font-weight: 800;
+
+}
+
+
+.hero-copy p {
+
+    max-width: 460px;
+
+    margin: 20px 0 0;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+}
+
+
+.hero-decoration {
+
+    position: relative;
+
+    width: 260px;
+    height: 220px;
+
+}
+
+
+.hero-orbit {
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    top: 0;
+    left: 15px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(100, 135, 225, 0.25);
+
+}
+
+
+.hero-orbit::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 25px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(100, 135, 225, 0.15);
+
+}
+
+
+.hero-cloud {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 100px;
+
+    filter:
+        drop-shadow(
+            0 25px 35px
+            rgba(60, 90, 150, 0.18)
+        );
+
+}
+
+
+/* =========================================================
+   GUEST PANEL
+========================================================= */
+
+.guest-panel {
+
+    margin-top: 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+    padding: 30px;
+
+    border-radius:
+        var(--radius-lg);
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(25px);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.guest-icon {
+
+    width: 70px;
+    height: 70px;
+
+    display: grid;
+
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 22px;
+
+    background:
+        rgba(100, 140, 230, 0.12);
+
+    font-size: 30px;
+
+}
+
+
+.guest-content h2 {
+
+    margin: 0;
+
+    font-size: 22px;
+
+    letter-spacing:
+        -0.035em;
+
+}
+
+
+.guest-content p {
+
+    max-width: 650px;
+
+    margin: 8px 0 18px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+}
+
+
+.guest-actions {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.primary-button,
+.secondary-button,
+.danger-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 11px 17px;
+
+    border-radius: 11px;
+
+    border: 0;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+}
+
+
+.primary-button {
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7298ef,
+            #536ed5
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(71, 118, 230, 0.20);
+
+}
+
+
+.secondary-button {
+
+    color: var(--text);
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+}
+
+
+.danger-button {
+
+    color: white;
+
+    background:
+        var(--danger);
+
+}
+
+
+/* =========================================================
+   FEATURE CARDS
+========================================================= */
+
+.feature-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 14px;
+
+    margin-top: 18px;
+
+}
+
+
+.feature-card {
+
+    padding: 22px;
+
+    border-radius:
+        var(--radius-md);
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(22px);
+
+}
+
+
+.feature-icon {
+
+    margin-bottom: 14px;
+
+    font-size: 23px;
+
+}
+
+
+.feature-card h3 {
+
+    margin: 0;
+
+    font-size: 13px;
+
+}
+
+
+.feature-card p {
+
+    margin: 6px 0 0;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   DASHBOARD HEADER
+========================================================= */
+
+.dashboard-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    margin-bottom: 16px;
+
+}
+
+
+.dashboard-header h2 {
+
+    margin: 0;
+
+    font-size: 27px;
+
+    letter-spacing:
+        -0.04em;
+
+}
+
+
+.dashboard-header p {
+
+    margin: 4px 0 0;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.mini-stat {
+
+    padding: 10px 15px;
+
+    border-radius: 13px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    text-align: right;
+
+}
+
+
+.mini-stat strong {
+
+    display: block;
+
+    font-size: 17px;
+
+}
+
+
+.mini-stat span {
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================================
+   UPLOAD
+========================================================= */
+
+.upload-card {
+
+    padding: 17px;
+
+    border-radius:
+        var(--radius-lg);
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(25px);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.drop-zone {
+
+    min-height: 190px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    border:
+        1.5px dashed
+        rgba(90, 125, 210, 0.30);
+
+    border-radius:
+        20px;
+
+    background:
+        rgba(255,255,255,0.20);
+
+    transition:
+        var(--transition);
+
+}
+
+
+.drop-zone:hover,
+.drop-zone.dragging,
+.drop-zone.has-file {
+
+    border-color:
+        rgba(71, 118, 230, 0.65);
+
+    background:
+        rgba(71, 118, 230, 0.06);
+
+}
+
+
+.upload-icon {
+
+    width: 48px;
+    height: 48px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 15px;
+
+    color: var(--primary);
+
+    background:
+        rgba(71, 118, 230, 0.10);
+
+    font-size: 23px;
+
+}
+
+
+.drop-zone h3 {
+
+    margin: 12px 0 4px;
+
+    font-size: 14px;
+
+}
+
+
+.drop-zone p {
+
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+.browse-button {
+
+    margin-top: 13px;
+
+    padding: 8px 13px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    color: white;
+
+    background:
+        var(--primary);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+.selected-file {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 14px;
+
+    padding: 9px 12px;
+
+    border-radius: 12px;
+
+    background:
+        var(--surface-strong);
+
+}
+
+
+.selected-file-icon {
+
+    font-size: 18px;
+
+}
+
+
+.selected-file strong {
+
+    display: block;
+
+    max-width: 300px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 9px;
+
+}
+
+
+.selected-file span {
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================================
+   VISIBILITY
+========================================================= */
+
+.visibility-section {
+
+    margin-top: 15px;
+
+}
+
+
+.section-label {
+
+    margin-bottom: 8px;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+.visibility-options {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 9px;
+
+}
+
+
+.visibility-option {
+
+    position: relative;
+
+    display: block;
+
+}
+
+
+.visibility-option input {
+
+    position: absolute;
+
+    opacity: 0;
+
+}
+
+
+.visibility-content {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    border-radius: 13px;
+
+    border:
+        1px solid var(--border);
+
+    background:
+        rgba(255,255,255,0.18);
+
+    cursor: pointer;
+
+    transition:
+        var(--transition);
+
+}
+
+
+.visibility-option input:checked
++ .visibility-content {
+
+    border-color:
+        rgba(71, 118, 230, 0.65);
+
+    background:
+        rgba(71, 118, 230, 0.08);
+
+}
+
+
+.visibility-icon {
+
+    font-size: 17px;
+
+}
+
+
+.visibility-content strong {
+
+    display: block;
+
+    font-size: 9px;
+
+}
+
+
+.visibility-content p {
+
+    margin: 2px 0 0;
+
+    color: var(--muted);
+
+    font-size: 7px;
+
+}
+
+
+.upload-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 14px;
+
+}
+
+
+.upload-limit {
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.upload-limit strong {
+
+    color: var(--text);
+
+}
+
+
+.upload-button {
+
+    padding: 11px 17px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7298ef,
+            #536ed5
+        );
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 10px 22px
+        rgba(71, 118, 230, 0.20);
+
+}
+
+
+.upload-button:disabled {
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-wrapper {
+
+    margin-top: 12px;
+
+}
+
+
+.progress-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 5px;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.progress-track {
+
+    height: 5px;
+
+    overflow: hidden;
+
+    border-radius: 99px;
+
+    background:
+        rgba(100, 120, 150, 0.15);
+
+}
+
+
+.progress-bar {
+
+    width: 0;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #6f95ee,
+            #69c6ad
+        );
+
+    transition:
+        width 0.2s ease;
+
+}
+
+
+/* =========================================================
+   FILE TOOLBAR
+========================================================= */
+
+.files-toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-top: 25px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.files-toolbar h3 {
+
+    margin: 0;
+
+    font-size: 15px;
+
+}
+
+
+.files-toolbar > div:first-child span {
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.search-box {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    width: 200px;
+
+    padding: 8px 11px;
+
+    border-radius: 11px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+}
+
+
+.search-box span {
+
+    color: var(--muted);
+
+}
+
+
+.search-box input {
+
+    width: 100%;
+
+    border: 0;
+
+    outline: 0;
+
+    background: transparent;
+
+    color: var(--text);
+
+    font-size: 9px;
+
+}
+
+
+/* =========================================================
+   FILE GRID
+========================================================= */
+
+.file-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(210px, 1fr)
+        );
+
+    gap: 12px;
+
+}
+
+
+.file-card {
+
+    overflow: hidden;
+
+    border-radius: 18px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(20px);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+
+}
+
+
+.file-card:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 18px 45px
+        rgba(60, 90, 130, 0.12);
+
+}
+
+
+.file-card-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 14px;
+
+}
+
+
+.file-type-icon {
+
+    width: 39px;
+    height: 39px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(71, 118, 230, 0.10);
+
+    font-size: 18px;
+
+}
+
+
+.file-menu {
+
+    display: flex;
+
+    gap: 3px;
+
+}
+
+
+.icon-button {
+
+    width: 28px;
+    height: 28px;
+
+    display: grid;
+
+    place-items: center;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255,255,255,0.25);
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+}
+
+
+.icon-button:hover {
+
+    color: var(--text);
+
+}
+
+
+.icon-button.danger:hover {
+
+    color: var(--danger);
+
+}
+
+
+.file-card-body {
+
+    padding: 0 14px 14px;
+
+}
+
+
+.file-card-body h4 {
+
+    margin: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 11px;
+
+}
+
+
+.file-meta {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    margin-top: 6px;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.visibility-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 3px 6px;
+
+    border-radius: 99px;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+}
+
+
+.visibility-badge.public {
+
+    color: #25825c;
+
+    background:
+        rgba(46, 174, 118, 0.10);
+
+}
+
+
+.visibility-badge.private {
+
+    color: #617090;
+
+    background:
+        rgba(100, 120, 150, 0.10);
+
+}
+
+
+.owner-label {
+
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-size: 7px;
+
+}
+
+
+.owner-label strong {
+
+    color: var(--text);
+
+}
+
+
+.download-button {
+
+    display: block;
+
+    margin: 0 10px 10px;
+
+    padding: 8px;
+
+    border-radius: 9px;
+
+    text-align: center;
+
+    color: var(--text);
+
+    background:
+        rgba(255,255,255,0.30);
+
+    border:
+        1px solid var(--border);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+}
+
+
+.download-button:hover {
+
+    background:
+        rgba(255,255,255,0.50);
+
+}
+
+
+.empty-state,
+.no-search-results {
+
+    grid-column:
+        1 / -1;
+
+    padding: 60px 20px;
+
+    text-align: center;
+
+    border-radius: 20px;
+
+    border:
+        1px dashed
+        rgba(100,120,150,0.25);
+
+}
+
+
+.empty-icon {
+
+    font-size: 40px;
+
+    opacity: 0.5;
+
+}
+
+
+.empty-state h3,
+.no-search-results h3 {
+
+    margin: 12px 0 5px;
+
+    font-size: 14px;
+
+}
+
+
+.empty-state p,
+.no-search-results p {
+
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.modal-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    padding: 20px;
+
+    background:
+        rgba(20, 30, 50, 0.30);
+
+    backdrop-filter:
+        blur(10px);
+
+    z-index: 100;
+
+}
+
+
+.modal-overlay[hidden] {
+
+    display: none;
+
+}
+
+
+.modal {
+
+    position: relative;
+
+    width: min(
+        470px,
+        100%
+    );
+
+    padding: 28px;
+
+    border-radius: 25px;
+
+    background:
+        var(--surface-strong);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(35px);
+
+    box-shadow:
+        0 30px 100px
+        rgba(20, 40, 70, 0.20);
+
+}
+
+
+.modal-close {
+
+    position: absolute;
+
+    top: 14px;
+    right: 14px;
+
+    width: 28px;
+    height: 28px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background:
+        rgba(100,120,150,0.10);
+
+    color: var(--muted);
+
+    font-size: 18px;
+
+}
+
+
+.modal-heading h2 {
+
+    margin: 0;
+
+    font-size: 23px;
+
+    letter-spacing:
+        -0.035em;
+
+}
+
+
+.modal-heading p {
+
+    margin: 6px 0 0;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+.settings-list {
+
+    margin-top: 20px;
+
+}
+
+
+.settings-row,
+.settings-action {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 14px 0;
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+
+.settings-row strong,
+.settings-action strong {
+
+    display: block;
+
+    font-size: 10px;
+
+}
+
+
+.settings-row span,
+.settings-action span {
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.account-badge {
+
+    padding: 5px 8px;
+
+    border-radius: 99px;
+
+    color: var(--primary) !important;
+
+    background:
+        rgba(71,118,230,0.10);
+
+}
+
+
+.settings-action {
+
+    color: var(--text);
+
+}
+
+
+.settings-action > span:first-child {
+
+    font-size: 16px;
+
+}
+
+
+.settings-action > div {
+
+    flex: 1;
+
+}
+
+
+.settings-action:hover {
+
+    opacity: 0.75;
+
+}
+
+
+.logout-action {
+
+    color: var(--danger);
+
+}
+
+
+/* =========================================================
+   THEME SWITCH
+========================================================= */
+
+.theme-switch {
+
+    position: relative;
+
+    width: 42px;
+    height: 24px;
+
+    padding: 0;
+
+    border: 0;
+
+    border-radius: 99px;
+
+    background:
+        rgba(100,120,150,0.20);
+
+}
+
+
+.theme-switch span {
+
+    position: absolute;
+
+    top: 3px;
+    left: 3px;
+
+    width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    transition:
+        var(--transition);
+
+}
+
+
+body.dark-theme
+.theme-switch span {
+
+    transform:
+        translateX(18px);
+
+    background:
+        #8ca7ff;
+
+}
+
+
+/* =========================================================
+   SHARE
+========================================================= */
+
+.share-link-box {
+
+    display: flex;
+
+    gap: 7px;
+
+    margin-top: 20px;
+
+}
+
+
+.share-link-box input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 10px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 10px;
+
+    outline: 0;
+
+    color: var(--text);
+
+    background:
+        rgba(255,255,255,0.20);
+
+    font-size: 8px;
+
+}
+
+
+.share-link-box button {
+
+    padding: 0 13px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    color: white;
+
+    background:
+        var(--primary);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+}
+
+
+.share-warning {
+
+    margin-top: 10px;
+
+    padding: 9px;
+
+    border-radius: 9px;
+
+    color: #8b6d32;
+
+    background:
+        rgba(210,170,70,0.10);
+
+    font-size: 7px;
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+.delete-modal {
+
+    text-align: center;
+
+}
+
+
+.delete-icon {
+
+    width: 54px;
+    height: 54px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin: 0 auto 15px;
+
+    border-radius: 17px;
+
+    color: var(--danger);
+
+    background:
+        rgba(228,92,104,0.10);
+
+    font-size: 28px;
+
+}
+
+
+.delete-modal h2 {
+
+    margin: 0;
+
+    font-size: 20px;
+
+}
+
+
+.delete-modal p {
+
+    margin: 7px 0 4px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+.delete-modal > strong {
+
+    display: block;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 10px;
+
+}
+
+
+.modal-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 20px;
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+
+    position: fixed;
+
+    right: 25px;
+    bottom: 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 11px 15px;
+
+    border-radius: 13px;
+
+    color: var(--text);
+
+    background:
+        var(--surface-strong);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(25px);
+
+    box-shadow:
+        var(--shadow);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    transform:
+        translateY(20px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition:
+        var(--transition);
+
+    z-index: 200;
+
+}
+
+
+.toast.show {
+
+    transform:
+        translateY(0);
+
+    opacity: 1;
+
+    visibility: visible;
+
+}
+
+
+.toast span:first-child {
+
+    width: 20px;
+    height: 20px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    color: white;
+
+    background:
+        var(--success);
+
+    font-size: 9px;
+
+}
+
+
+/* =========================================================
+   AUTH PAGES
+========================================================= */
+
+.auth-page {
+
+    min-height: 100vh;
+
+    display: grid;
+
+    place-items: center;
+
+    padding: 25px;
+
+}
+
+
+.auth-card {
+
+    position: relative;
+
+    width: min(
+        420px,
+        100%
+    );
+
+    padding: 36px;
+
+    border-radius:
+        30px;
+
+    background:
+        var(--surface-strong);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(35px);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.auth-back {
+
+    display: inline-block;
+
+    margin-bottom: 25px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+
+.auth-logo {
+
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 18px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7298ef,
+            #536ed5
+        );
+
+    font-size: 28px;
+
+    box-shadow:
+        0 15px 30px
+        rgba(71,118,230,0.22);
+
+}
+
+
+.auth-heading h1 {
+
+    margin: 0;
+
+    font-size: 30px;
+
+    letter-spacing:
+        -0.05em;
+
+}
+
+
+.auth-heading p {
+
+    margin: 7px 0 20px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.flash-message {
+
+    margin-bottom: 15px;
+
+    padding: 10px;
+
+    border-radius: 10px;
+
+    color: #9b5960;
+
+    background:
+        rgba(228,92,104,0.10);
+
+    font-size: 8px;
+
+}
+
+
+.auth-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+}
+
+
+.auth-field label {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+.auth-field input {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 11px;
+
+    outline: 0;
+
+    color: var(--text);
+
+    background:
+        rgba(255,255,255,0.22);
+
+    font-size: 10px;
+
+    transition:
+        var(--transition);
+
+}
+
+
+.auth-field input:focus {
+
+    border-color:
+        rgba(71,118,230,0.55);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(71,118,230,0.08);
+
+}
+
+
+.auth-submit {
+
+    margin-top: 5px;
+
+    padding: 13px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7298ef,
+            #536ed5
+        );
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+}
+
+
+.auth-switch {
+
+    margin-top: 20px;
+
+    color: var(--muted);
+
+    text-align: center;
+
+    font-size: 9px;
+
+}
+
+
+.auth-switch a {
+
+    color: var(--primary);
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+.admin-page {
+
+    width: min(
+        1250px,
+        calc(100% - 40px)
+    );
+
+    margin: 0 auto;
+
+    padding: 35px 0 60px;
+
+}
+
+
+.admin-topbar {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+
+}
+
+
+.admin-back {
+
+    display: block;
+
+    margin-bottom: 20px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+
+.admin-topbar h1 {
+
+    margin: 0;
+
+    font-size: 36px;
+
+    letter-spacing:
+        -0.05em;
+
+}
+
+
+.admin-topbar p {
+
+    margin: 7px 0 0;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.admin-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 14px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.admin-stat-card {
+
+    padding: 20px;
+
+    border-radius: 19px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(22px);
+
+}
+
+
+.admin-stat-card > span {
+
+    font-size: 19px;
+
+}
+
+
+.admin-stat-card strong {
+
+    display: block;
+
+    margin-top: 10px;
+
+    font-size: 24px;
+
+}
+
+
+.admin-stat-card p {
+
+    margin: 2px 0 0;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.admin-card {
+
+    margin-top: 18px;
+
+    overflow: hidden;
+
+    border-radius: 21px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(25px);
+
+}
+
+
+.admin-section-heading {
+
+    padding: 20px;
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+
+.admin-section-heading h2 {
+
+    margin: 0;
+
+    font-size: 16px;
+
+}
+
+
+.admin-table-wrapper {
+
+    overflow-x: auto;
+
+}
+
+
+.admin-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+.admin-table th,
+.admin-table td {
+
+    padding: 13px 20px;
+
+    border-bottom:
+        1px solid var(--border);
+
+    text-align: left;
+
+    white-space: nowrap;
+
+    font-size: 9px;
+
+}
+
+
+.admin-table th {
+
+    color: var(--muted);
+
+    font-size: 7px;
+
+    text-transform: uppercase;
+
+    letter-spacing:
+        0.08em;
+
+}
+
+
+.table-user {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.role-badge {
+
+    padding: 4px 7px;
+
+    border-radius: 99px;
+
+    color: var(--muted);
+
+    background:
+        rgba(100,120,150,0.10);
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+}
+
+
+.role-badge.admin {
+
+    color: var(--primary);
+
+    background:
+        rgba(71,118,230,0.10);
+
+}
+
+
+.admin-delete-button {
+
+    padding: 6px 9px;
+
+    border: 0;
+
+    border-radius: 7px;
+
+    color: var(--danger);
+
+    background:
+        rgba(228,92,104,0.08);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-page {
+
+    min-height: 100vh;
+
+    display: grid;
+
+    place-items: center;
+
+    padding: 20px;
+
+}
+
+
+.error-card {
+
+    width: min(
+        500px,
+        100%
+    );
+
+    padding: 45px;
+
+    text-align: center;
+
+    border-radius: 28px;
+
+    background:
+        var(--surface-strong);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(30px);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.error-code {
+
+    margin-bottom: 10px;
+
+    color: var(--primary);
+
+    font-size: 60px;
+
+    font-weight: 800;
+
+    letter-spacing:
+        -0.07em;
+
+}
+
+
+.error-card h1 {
+
+    margin: 0;
+
+    font-size: 24px;
+
+}
+
+
+.error-card p {
+
+    margin: 8px 0 20px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .sidebar {
+
+        width: 220px;
+
+    }
+
+
+    .main-content {
+
+        width: calc(
+            100% - 250px
+        );
+
+        margin-left: 250px;
+
+        padding-left: 18px;
+        padding-right: 18px;
+
+    }
+
+
+    .hero-decoration {
+
+        opacity: 0.5;
+
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .sidebar {
+
+        position: static;
+
+        width: 100%;
+
+        height: auto;
+
+        margin: 10px;
+
+        padding: 15px;
+
+    }
+
+
+    .app-shell {
+
+        display: block;
+
+    }
+
+
+    .side-navigation {
+
+        flex-direction: row;
+
+        overflow-x: auto;
+
+    }
+
+
+    .nav-item {
+
+        white-space: nowrap;
+
+    }
+
+
+    .sidebar-bottom {
+
+        display: none;
+
+    }
+
+
+    .main-content {
+
+        width: auto;
+
+        margin-left: 0;
+
+        padding: 10px;
+
+    }
+
+
+    .mobile-brand {
+
+        display: block;
+
+    }
+
+
+    .topbar {
+
+        margin-bottom: 18px;
+
+    }
+
+
+    .azure-status {
+
+        display: none;
+
+    }
+
+
+    .hero-section {
+
+        min-height: 280px;
+
+        padding: 25px;
+
+    }
+
+
+    .hero-decoration {
+
+        display: none;
+
+    }
+
+
+    .feature-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .guest-panel {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+    .visibility-options {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .upload-footer {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .upload-button {
+
+        width: 100%;
+
+    }
+
+
+    .files-toolbar {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+        gap: 10px;
+
+    }
+
+
+    .search-box {
+
+        width: 100%;
+
+    }
+
+
+    .admin-stats {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .admin-topbar {
+
+        flex-direction: column;
+
+        gap: 20px;
+
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .profile-name {
+
+        display: none;
+
+    }
+
+
+    .hero-copy h1 {
+
+        font-size: 40px;
+
+    }
+
+
+    .auth-card {
+
+        padding: 25px;
+
+    }
+
+
+    .guest-actions {
+
+        flex-direction: column;
+
+        width: 100%;
+
+    }
+
+
+    .guest-actions a {
+
+        width: 100%;
+
+    }
+
+}
+/* =========================================================
+   CLOUD WORKSPACE — FONT SIZE BOOST
+   ========================================================= */
+
+/* Base text */
+body {
+    font-size: 15px;
+}
+
+/* Brand */
+.brand-name {
+    font-size: 17px;
+}
+
+.brand-subtitle {
+    font-size: 13px;
+}
+
+/* Sidebar */
+.nav-item {
+    font-size: 15px;
+}
+
+.security-card strong {
+    font-size: 14px;
+}
+
+.security-card p {
+    font-size: 12px;
+}
+
+.sidebar-user-info strong {
+    font-size: 14px;
+}
+
+.sidebar-user-info span {
+    font-size: 12px;
+}
+
+/* Top bar */
+.azure-status {
+    font-size: 14px;
+}
+
+.profile-name {
+    font-size: 14px;
+}
+
+.profile-dropdown button,
+.profile-dropdown a {
+    font-size: 14px;
+}
+
+/* Hero */
+.eyebrow {
+    font-size: 12px;
+    letter-spacing: 1.4px;
+}
+
+.hero-copy h1 {
+    font-size: clamp(38px, 4vw, 58px);
+    line-height: 1.08;
+}
+
+.hero-copy p {
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* Dashboard */
+.dashboard-header h2 {
+    font-size: 30px;
+}
+
+.dashboard-header p {
+    font-size: 15px;
+}
+
+/* Upload area */
+.drop-zone h3 {
+    font-size: 19px;
+}
+
+.drop-zone p {
+    font-size: 14px;
+}
+
+.browse-button {
+    font-size: 14px;
+}
+
+.selected-file strong {
+    font-size: 14px;
+}
+
+.selected-file span {
+    font-size: 12px;
+}
+
+/* Visibility */
+.section-label {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.visibility-option strong {
+    font-size: 14px;
+}
+
+.visibility-option p {
+    font-size: 12px;
+}
+
+/* Upload footer */
+.upload-limit {
+    font-size: 13px;
+}
+
+.upload-button {
+    font-size: 14px;
+}
+
+/* Files section */
+.files-toolbar h3 {
+    font-size: 24px;
+}
+
+.files-toolbar > div > span {
+    font-size: 13px;
+}
+
+.search-box input {
+    font-size: 14px;
+}
+
+/* File cards */
+.file-card h4 {
+    font-size: 15px;
+}
+
+.file-meta {
+    font-size: 12px;
+}
+
+.visibility-badge {
+    font-size: 11px;
+}
+
+.owner-label {
+    font-size: 12px;
+}
+
+.download-button {
+    font-size: 13px;
+}
+
+/* Empty state */
+.empty-state h3 {
+    font-size: 20px;
+}
+
+.empty-state p {
+    font-size: 14px;
+}
+
+/* Guest section */
+.guest-content h2 {
+    font-size: 28px;
+}
+
+.guest-content p {
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.primary-button,
+.secondary-button {
+    font-size: 14px;
+}
+
+.feature-card h3 {
+    font-size: 17px;
+}
+
+.feature-card p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Settings */
+.modal-heading h2 {
+    font-size: 28px;
+}
+
+.modal-heading p {
+    font-size: 14px;
+}
+
+.settings-row strong {
+    font-size: 15px;
+}
+
+.settings-row span {
+    font-size: 13px;
+}
+
+.settings-action strong {
+    font-size: 15px;
+}
+
+.settings-action span {
+    font-size: 13px;
+}
+
+/* Share modal */
+.share-link-box input {
+    font-size: 13px;
+}
+
+.share-link-box button {
+    font-size: 13px;
+}
+
+.share-warning {
+    font-size: 12px;
+}
+
+/* Delete modal */
+.delete-modal h2 {
+    font-size: 24px;
+}
+
+.delete-modal p {
+    font-size: 14px;
+}
+
+.delete-modal > strong {
+    font-size: 15px;
+}
+
+.danger-button,
+.delete-modal .secondary-button {
+    font-size: 14px;
+}
+
+/* Toast */
+.toast {
+    font-size: 14px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    .hero-copy h1 {
+        font-size: 38px;
+    }
+
+    .hero-copy p {
+        font-size: 15px;
+    }
+
+    .dashboard-header h2 {
+        font-size: 26px;
+    }
+
+    .files-toolbar h3 {
+        font-size: 22px;
+    }
+
+    .guest-content h2 {
+        font-size: 25px;
+    }
+}
+
+/* =========================================================
+   CLOUD WORKSPACE — GLOBAL TYPOGRAPHY UPGRADE
+   Applies to USER + ADMIN pages
+   ========================================================= */
+
+/* Main font */
+body,
+button,
+input,
+select,
+textarea {
+    font-family: "Manrope", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+}
+
+/* Slightly stronger overall typography */
+body {
+    font-size: 15px;
+    letter-spacing: 0.01em;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.brand-name {
+    font-size: 18px !important;
+    font-weight: 800;
+}
+
+.brand-subtitle {
+    font-size: 13px !important;
+    font-weight: 600;
+}
+
+.nav-item {
+    font-size: 15px !important;
+    font-weight: 700;
+}
+
+.security-card strong {
+    font-size: 14px !important;
+    font-weight: 800;
+}
+
+.security-card p {
+    font-size: 13px !important;
+}
+
+.sidebar-user-info strong {
+    font-size: 15px !important;
+    font-weight: 800;
+}
+
+.sidebar-user-info span {
+    font-size: 13px !important;
+}
+
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.azure-status {
+    font-size: 14px !important;
+    font-weight: 700;
+}
+
+.profile-name {
+    font-size: 14px !important;
+    font-weight: 700;
+}
+
+.profile-dropdown a,
+.profile-dropdown button {
+    font-size: 14px !important;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   HEADINGS
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4 {
+    letter-spacing: -0.025em;
+}
+
+.hero-copy h1 {
+    font-weight: 800;
+}
+
+.dashboard-header h2 {
+    font-size: 32px !important;
+    font-weight: 800;
+}
+
+.files-toolbar h3 {
+    font-size: 25px !important;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   NORMAL TEXT
+   ========================================================= */
+
+.hero-copy p {
+    font-size: 17px !important;
+    line-height: 1.7;
+}
+
+.dashboard-header p {
+    font-size: 15px !important;
+    line-height: 1.6;
+}
+
+.eyebrow {
+    font-size: 12px !important;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================================================
+   UPLOAD
+   ========================================================= */
+
+.drop-zone h3 {
+    font-size: 20px !important;
+    font-weight: 800;
+}
+
+.drop-zone p {
+    font-size: 15px !important;
+}
+
+.browse-button,
+.upload-button {
+    font-size: 15px !important;
+    font-weight: 800;
+}
+
+.upload-limit {
+    font-size: 14px !important;
+}
+
+
+/* =========================================================
+   VISIBILITY OPTIONS
+   ========================================================= */
+
+.section-label {
+    font-size: 15px !important;
+    font-weight: 800;
+}
+
+.visibility-option strong {
+    font-size: 15px !important;
+    font-weight: 800;
+}
+
+.visibility-option p {
+    font-size: 13px !important;
+}
+
+
+/* =========================================================
+   FILE CARDS
+   ========================================================= */
+
+.file-card h4 {
+    font-size: 16px !important;
+    font-weight: 800;
+}
+
+.file-meta {
+    font-size: 13px !important;
+}
+
+.visibility-badge {
+    font-size: 12px !important;
+    font-weight: 700;
+}
+
+.owner-label {
+    font-size: 13px !important;
+}
+
+.download-button {
+    font-size: 14px !important;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.search-box input {
+    font-size: 14px !important;
+}
+
+.search-box input::placeholder {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   GUEST PAGE
+   ========================================================= */
+
+.guest-content h2 {
+    font-size: 30px !important;
+    font-weight: 800;
+}
+
+.guest-content p {
+    font-size: 16px !important;
+    line-height: 1.7;
+}
+
+.primary-button,
+.secondary-button {
+    font-size: 15px !important;
+    font-weight: 800;
+}
+
+.feature-card h3 {
+    font-size: 18px !important;
+    font-weight: 800;
+}
+
+.feature-card p {
+    font-size: 14px !important;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+.modal-heading h2 {
+    font-size: 30px !important;
+    font-weight: 800;
+}
+
+.modal-heading p {
+    font-size: 15px !important;
+}
+
+.settings-row strong {
+    font-size: 16px !important;
+    font-weight: 800;
+}
+
+.settings-row span {
+    font-size: 13px !important;
+}
+
+.settings-action strong {
+    font-size: 16px !important;
+    font-weight: 800;
+}
+
+.settings-action span {
+    font-size: 13px !important;
+}
+
+
+/* =========================================================
+   ADMIN PANEL
+   ========================================================= */
+
+/* Admin page main headings */
+.admin-container h1,
+.admin-content h1,
+.admin-main h1 {
+    font-size: 34px !important;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.admin-container h2,
+.admin-content h2,
+.admin-main h2 {
+    font-size: 25px !important;
+    font-weight: 800;
+}
+
+.admin-container h3,
+.admin-content h3,
+.admin-main h3 {
+    font-size: 19px !important;
+    font-weight: 800;
+}
+
+
+/* Admin descriptions */
+.admin-container p,
+.admin-content p,
+.admin-main p {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+/* Admin statistics */
+.stat-card strong,
+.admin-stat strong {
+    font-size: 28px !important;
+    font-weight: 800;
+}
+
+.stat-card span,
+.admin-stat span {
+    font-size: 14px !important;
+    font-weight: 600;
+}
+
+
+/* Admin tables */
+.admin-container table,
+.admin-content table,
+.admin-main table {
+    font-size: 14px !important;
+}
+
+.admin-container th,
+.admin-content th,
+.admin-main th {
+    font-size: 13px !important;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.admin-container td,
+.admin-content td,
+.admin-main td {
+    font-size: 14px !important;
+    font-weight: 600;
+}
+
+
+/* Admin buttons */
+.admin-container button,
+.admin-content button,
+.admin-main button {
+    font-size: 14px !important;
+    font-weight: 800;
+}
+
+
+/* Admin badges */
+.admin-container .badge,
+.admin-content .badge,
+.admin-main .badge {
+    font-size: 12px !important;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+.share-link-box input {
+    font-size: 14px !important;
+}
+
+.share-link-box button {
+    font-size: 14px !important;
+    font-weight: 800;
+}
+
+.share-warning {
+    font-size: 13px !important;
+}
+
+.delete-modal h2 {
+    font-size: 26px !important;
+}
+
+.delete-modal p {
+    font-size: 15px !important;
+}
+
+.danger-button {
+    font-size: 14px !important;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast {
+    font-size: 14px !important;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    .hero-copy h1 {
+        font-size: 40px !important;
+    }
+
+    .hero-copy p {
+        font-size: 15px !important;
+    }
+
+    .dashboard-header h2 {
+        font-size: 28px !important;
+    }
+
+    .files-toolbar h3 {
+        font-size: 23px !important;
+    }
+
+    .admin-container h1,
+    .admin-content h1,
+    .admin-main h1 {
+        font-size: 28px !important;
+    }
+
+    .admin-container table,
+    .admin-content table,
+    .admin-main table {
+        font-size: 13px !important;
+    }
+}
+/* =========================================================
+   CLOUD WORKSPACE — ADMIN PANEL TYPOGRAPHY
+   ========================================================= */
+
+.admin-page-body {
+    font-family: "Manrope", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   ADMIN PAGE
+   ========================================================= */
+
+.admin-page {
+    position: relative;
+    z-index: 2;
+
+    width: min(1400px, calc(100% - 64px));
+
+    margin: 0 auto;
+
+    padding: 42px 0 70px;
+}
+
+
+/* =========================================================
+   ADMIN TOPBAR
+   ========================================================= */
+
+.admin-topbar {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 40px;
+
+    margin-bottom: 40px;
+}
+
+
+.admin-heading {
+    max-width: 800px;
+}
+
+
+.admin-back {
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-bottom: 22px;
+
+    font-size: 15px !important;
+
+    font-weight: 800;
+
+    text-decoration: none;
+}
+
+
+.admin-topbar .eyebrow {
+    margin-bottom: 8px;
+
+    font-size: 13px !important;
+
+    font-weight: 800;
+
+    letter-spacing: 1.7px;
+}
+
+
+.admin-topbar h1 {
+    margin: 0;
+
+    font-size: 42px !important;
+
+    line-height: 1.1;
+
+    font-weight: 800;
+
+    letter-spacing: -0.035em;
+}
+
+
+.admin-topbar p {
+    margin: 14px 0 0;
+
+    font-size: 17px !important;
+
+    line-height: 1.6;
+
+    font-weight: 500;
+
+    opacity: 0.72;
+}
+
+
+.admin-logout {
+    flex-shrink: 0;
+
+    margin-top: 42px;
+
+    font-size: 15px !important;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   ADMIN STATISTICS
+   ========================================================= */
+
+.admin-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 22px;
+
+    margin-bottom: 30px;
+}
+
+
+.admin-stat-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    min-height: 125px;
+
+    padding: 24px 26px;
+
+    border-radius: 24px;
+
+    background:
+        rgba(255, 255, 255, 0.42);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.65);
+
+    box-shadow:
+        0 18px 50px rgba(80, 100, 130, 0.10);
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+}
+
+
+.admin-stat-icon {
+    width: 58px;
+
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 18px;
+
+    background:
+        rgba(255, 255, 255, 0.55);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.75);
+
+    font-size: 25px;
+}
+
+
+.admin-stat-info {
+    min-width: 0;
+}
+
+
+.admin-stat-info strong {
+    display: block;
+
+    font-size: 31px !important;
+
+    line-height: 1;
+
+    font-weight: 800;
+
+    letter-spacing: -0.03em;
+}
+
+
+.admin-stat-info p {
+    margin: 8px 0 0;
+
+    font-size: 14px !important;
+
+    font-weight: 700;
+
+    opacity: 0.62;
+}
+
+
+/* =========================================================
+   ADMIN CARDS
+   ========================================================= */
+
+.admin-card {
+    margin-bottom: 28px;
+
+    padding: 30px;
+
+    border-radius: 28px;
+
+    background:
+        rgba(255, 255, 255, 0.43);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.65);
+
+    box-shadow:
+        0 22px 60px rgba(70, 90, 120, 0.10);
+
+    backdrop-filter:
+        blur(30px);
+
+    -webkit-backdrop-filter:
+        blur(30px);
+}
+
+
+.admin-section-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+}
+
+
+.admin-section-heading .eyebrow {
+    font-size: 12px !important;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+.admin-section-heading h2 {
+    margin: 6px 0 0;
+
+    font-size: 27px !important;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    letter-spacing: -0.025em;
+}
+
+
+.admin-section-heading p {
+    margin: 8px 0 0;
+
+    font-size: 14px !important;
+
+    line-height: 1.5;
+
+    font-weight: 500;
+
+    opacity: 0.65;
+}
+
+
+/* =========================================================
+   ADMIN TABLE
+   ========================================================= */
+
+.admin-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: 18px;
+}
+
+
+.admin-table {
+    width: 100%;
+
+    border-collapse: separate;
+
+    border-spacing: 0;
+
+    min-width: 760px;
+}
+
+
+.admin-table thead th {
+    padding: 16px 18px;
+
+    text-align: left;
+
+    font-size: 13px !important;
+
+    font-weight: 800;
+
+    letter-spacing: 0.05em;
+
+    text-transform: uppercase;
+
+    opacity: 0.58;
+
+    border-bottom:
+        1px solid rgba(100, 110, 130, 0.15);
+}
+
+
+.admin-table tbody td {
+    padding: 18px;
+
+    font-size: 15px !important;
+
+    font-weight: 600;
+
+    border-bottom:
+        1px solid rgba(100, 110, 130, 0.10);
+}
+
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.admin-table tbody tr {
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.admin-table tbody tr:hover {
+    background:
+        rgba(255, 255, 255, 0.30);
+}
+
+
+/* =========================================================
+   TABLE USER
+   ========================================================= */
+
+.table-user {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.table-user strong {
+    font-size: 15px !important;
+
+    font-weight: 800;
+}
+
+
+.table-user .avatar.small {
+    width: 40px;
+
+    height: 40px;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   FILE NAME
+   ========================================================= */
+
+.admin-file-name {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    max-width: 330px;
+}
+
+
+.admin-file-icon {
+    width: 38px;
+
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255, 255, 255, 0.48);
+
+    font-size: 17px;
+}
+
+
+.admin-file-name strong {
+    display: block;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 15px !important;
+
+    font-weight: 800;
+}
+
+
+.admin-owner,
+.admin-file-size {
+    font-size: 14px !important;
+
+    font-weight: 700;
+
+    opacity: 0.78;
+}
+
+
+/* =========================================================
+   ROLE BADGES
+   ========================================================= */
+
+.role-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 7px 12px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(100, 110, 130, 0.10);
+
+    font-size: 12px !important;
+
+    font-weight: 800;
+}
+
+
+.role-badge.admin {
+    background:
+        rgba(80, 120, 255, 0.13);
+}
+
+
+/* =========================================================
+   VISIBILITY BADGES
+   ========================================================= */
+
+.admin-table .visibility-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    font-size: 12px !important;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+   ========================================================= */
+
+.admin-delete-button {
+    border: none;
+
+    padding: 10px 16px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 13px !important;
+
+    font-weight: 800;
+
+    background:
+        rgba(255, 80, 100, 0.10);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.admin-delete-button:hover {
+    transform: translateY(-1px);
+
+    background:
+        rgba(255, 80, 100, 0.17);
+}
+
+
+.admin-delete-button:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* =========================================================
+   RESTORE USER HERO
+   ========================================================= */
+
+/*
+   Keep "Your cloud, your workspace."
+   at the original large hero size.
+*/
+
+.hero-copy h1 {
+    font-size: clamp(46px, 5vw, 68px) !important;
+
+    line-height: 1.04;
+
+    font-weight: 800;
+
+    letter-spacing: -0.045em;
+}
+
+
+.hero-copy p {
+    font-size: 17px !important;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   MOBILE ADMIN
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .admin-page {
+        width: min(
+            100% - 32px,
+            700px
+        );
+
+        padding-top: 28px;
+    }
+
+
+    .admin-topbar {
+        flex-direction: column;
+
+        gap: 20px;
+    }
+
+
+    .admin-logout {
+        margin-top: 0;
+    }
+
+
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+
+
+    .admin-card {
+        padding: 22px;
+    }
+
+
+    .admin-topbar h1 {
+        font-size: 36px !important;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .admin-page {
+        width: calc(100% - 24px);
+    }
+
+
+    .admin-topbar h1 {
+        font-size: 31px !important;
+    }
+
+
+    .admin-topbar p {
+        font-size: 15px !important;
+    }
+
+
+    .admin-stat-card {
+        min-height: 105px;
+
+        padding: 20px;
+    }
+
+
+    .admin-stat-info strong {
+        font-size: 27px !important;
+    }
+
+
+    .admin-card {
+        padding: 18px;
+    }
+
+
+    .admin-section-heading h2 {
+        font-size: 23px !important;
+    }
+
+
+    .hero-copy h1 {
+        font-size: 42px !important;
+    }
+
+}
+
+/* =========================================================
+   ADMIN FILE CONTROLS
+   ========================================================= */
+
+.admin-files-table {
+    min-width: 1100px;
+}
+
+
+.admin-select {
+    min-width: 125px;
+
+    padding: 11px 32px 11px 13px;
+
+    border-radius: 12px;
+
+    border:
+        1px solid rgba(120, 130, 150, 0.18);
+
+    background:
+        rgba(255, 255, 255, 0.55);
+
+    color: inherit;
+
+    font-family: "Manrope", sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.admin-select:hover {
+    background:
+        rgba(255, 255, 255, 0.75);
+
+    transform: translateY(-1px);
+}
+
+
+.admin-select:focus {
+    border-color:
+        rgba(80, 110, 255, 0.45);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(80, 110, 255, 0.08);
+}
+
+
+.admin-file-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.admin-update-button,
+.admin-delete-button {
+    padding: 10px 15px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    font-family: "Manrope", sans-serif;
+
+    font-size: 13px !important;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.admin-update-button {
+    background:
+        rgba(70, 110, 255, 0.13);
+}
+
+
+.admin-update-button:hover {
+    background:
+        rgba(70, 110, 255, 0.20);
+
+    transform: translateY(-1px);
+}
+
+
+.admin-delete-button {
+    background:
+        rgba(255, 80, 100, 0.10);
+}
+
+
+.admin-delete-button:hover {
+    background:
+        rgba(255, 80, 100, 0.18);
+
+    transform: translateY(-1px);
+}
+
+
+.admin-update-button:disabled,
+.admin-delete-button:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+.admin-file-name strong {
+    max-width: 280px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DARK THEME — ADMIN CONTROLS
+   ========================================================= */
+
+body.dark-theme .admin-select {
+    background:
+        rgba(30, 35, 45, 0.65);
+
+    border-color:
+        rgba(255, 255, 255, 0.10);
+
+    color: inherit;
+}
+
+
+body.dark-theme .admin-select:hover {
+    background:
+        rgba(45, 50, 62, 0.85);
+}
+
+
+/* =========================================================
+   ARCHIVE BADGE SUPPORT
+   ========================================================= */
+
+.tier-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .admin-files-table {
+        min-width: 1050px;
+    }
+
+}
